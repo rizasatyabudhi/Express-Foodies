@@ -1,0 +1,3 @@
+Image Upload
+1. use multer library, and create multerOptions
+2. the form tag must have (enctype="multipart/form-data")

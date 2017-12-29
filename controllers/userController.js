@@ -51,3 +51,20 @@ exports.register = async (req, res, next) => {
   await register(user, req.body.password);
   next();
 };
+
+exports.account = async (req, res, next) => {
+  res.render("account");
+};
+
+exports.updateAccount = async (req, res) => {
+  const updates = { name: req.body.name, email: req.body.email };
+  const user = await User.findOneAndUpdate(
+    // req.user is from passport,
+    { _id: req.user._id },
+    { $set: updates },
+    // context is needed for mongoose to run properly (?)
+    { new: true, runValidators: true, context: "query" }
+  );
+  req.flash("success", "successfully updated account!");
+  res.redirect("back");
+};

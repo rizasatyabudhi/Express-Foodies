@@ -56,6 +56,8 @@ app.use(flash());
 app.use((req, res, next) => {
   res.locals.h = helpers;
   res.locals.flashes = req.flash();
+  // this will let use use req.user..... in the controllers
+  // to get the user data that is logged in from passport
   res.locals.user = req.user || null;
   res.locals.currentPath = req.path;
   next();

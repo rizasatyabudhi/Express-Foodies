@@ -1,6 +1,8 @@
 const passport = require("passport");
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
+const promisify = require("es6-promisify");
+
 const crypto = require("crypto");
 
 // tell what strategy we want to use, we use "local"
@@ -55,8 +57,46 @@ exports.reset = async (req, res) => {
     resetPasswordToken: req.params.token,
     resetPasswordExpires: { $gt: Date.now() }
   });
+  // if there is no user
   if (!user) {
     req.flash("error", "Password reset is invalid or has expired");
     return res.redirect("/login");
   }
+  // if there is a user, show the reset form
+  res.render("reset", { title: "Reset Your Password" });
+};
+
+exports.confirmedPasswords = async (req, res, next) => {
+  // we use [] to escape "-" character
+  if (req.body.password === req.body["password-confirm"]) {
+    next(); // password match, keep going
+    return;
+  }
+  req.flash("error", "password do not match");
+  res.redirect("back");
+};
+
+exports.update = async (req, res, next) => {
+  const user = await User.findOne({
+    resetPasswordToken: req.params.token,
+    resetPasswordExpires: { $gt: Date.now() }
+  });
+  // if there is no user
+  if (!user) {
+    req.flash("error", "Password reset is invalid or has expired");
+    return res.redirect("/login");
+  }
+
+  // setPassword() is available because we import passportLocalMongoose in User model
+  const setPassword = promisify(user.setPassword, user);
+  await setPassword(req.body.password);
+  user.resetPasswordExpires = undefined;
+  user.resetPasswordExpires = undefined;
+  // we need to run .save() to actually store the update in the database
+  const updatedUser = await user.save();
+  // req.login is from passport,
+  // we can pass an existing user to login
+  await req.login(updatedUser);
+  req.flash("success", "Your password has been reset! You are now logged in!");
+  res.redirect("/");
 };

@@ -87,6 +87,10 @@ exports.getStore = async (req, res) => {
 };
 
 exports.getStoresByTag = async (req, res) => {
-  const stores = await Store.getTagsList();
-  res.json(stores);
+  const tag = req.params.tag; // to get what tag is currently opened
+  const tagsPromise = Store.getTagsList();
+  const storesPromise = Store.find({ tags: tag });
+  // we want 2 query at the same time, we use await and Promise.all
+  const [tags, stores] = await Promise.all([tagsPromise, storesPromise]);
+  res.render("tag", { tags, title: "Tags", tag, stores });
 };

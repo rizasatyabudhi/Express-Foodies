@@ -1,3 +1,6 @@
+const User = require("../models/User");
+const promisify = require("es6-promisify");
+
 exports.loginForm = (req, res) => {
   res.render("login", { title: "login" });
 };
@@ -34,4 +37,17 @@ exports.validateRegister = (req, res, next) => {
     return; // stop the function from running
   }
   next(); // there were no errors
+};
+
+exports.register = async (req, res, next) => {
+  const user = new User({ email: req.body.email, name: req.body.name });
+  // User.register is a function from "passportLocalMongoose" that we import in User.js (model)
+  // it doesn't return a promise, so we use promisify to make it a promise based
+  // 1st argument = the function we want to make into promise
+  // 2nd argument = where the function is declared
+  const register = promisify(User.register, User);
+  // the password will be hashed automatically
+  await register(user, req.body.password);
+  res.send("it worked");
+  next();
 };

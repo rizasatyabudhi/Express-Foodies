@@ -7,6 +7,7 @@ const validator = require("validator");
 const mongodbErrorHandler = require("mongoose-mongodb-errors");
 const passportLocalMongoose = require("passport-local-mongoose");
 
+// don't forget to import it in start.js
 const userSchema = new Schema({
   email: {
     type: String,

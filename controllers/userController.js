@@ -1,4 +1,5 @@
-const User = require("../models/User");
+const mongoose = require("mongoose");
+const User = mongoose.model("User");
 const promisify = require("es6-promisify");
 
 exports.loginForm = (req, res) => {
@@ -48,6 +49,5 @@ exports.register = async (req, res, next) => {
   const register = promisify(User.register, User);
   // the password will be hashed automatically
   await register(user, req.body.password);
-  res.send("it worked");
   next();
 };

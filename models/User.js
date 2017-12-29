@@ -24,6 +24,14 @@ const userSchema = new Schema({
   }
 });
 
+userSchema.virtual("gravatar").get(function() {
+  // we use gravatar for the profile image
+  // we hash the email from the model
+  // s=200 is the size of 200px 200px
+  const hash = md5(this.email);
+  return `https://gravatar.com/avatar/${hash}?s=200`;
+});
+
 // tell passport to use "email" as username for authentication
 userSchema.plugin(passportLocalMongoose, { usernameField: "email" });
 userSchema.plugin(mongodbErrorHandler);

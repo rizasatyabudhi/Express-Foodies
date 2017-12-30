@@ -1,3 +1,10 @@
 Image Upload
 1. use multer library, and create multerOptions
 2. the form tag must have (enctype="multipart/form-data")
+
+Email to Users
+1. use mailtrap.io
+2. set the Mail Username and Mail Password in variables.env
+3. create mail.js, and configure it there
+4. create a new function to send email "exports.send", and use it in authController
+5. generateHTML

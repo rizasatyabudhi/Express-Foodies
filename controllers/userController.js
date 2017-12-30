@@ -1,39 +1,40 @@
-const mongoose = require("mongoose");
-const User = mongoose.model("User");
-const promisify = require("es6-promisify");
+const mongoose = require('mongoose');
+
+const User = mongoose.model('User');
+const promisify = require('es6-promisify');
 
 exports.loginForm = (req, res) => {
-  res.render("login", { title: "login" });
+  res.render('login', { title: 'login' });
 };
 
 exports.registerForm = (req, res) => {
-  res.render("register", { title: "register" });
+  res.render('register', { title: 'register' });
 };
 
 exports.validateRegister = (req, res, next) => {
   // we get these functions from "expressValidator" library we import in app.js
-  req.sanitizeBody("name");
-  req.checkBody("name", "You must supply a name!").notEmpty();
-  req.checkBody("email", "That email is not valid!").isEmail();
-  req.sanitizeBody("email").normalizeEmail({
+  req.sanitizeBody('name');
+  req.checkBody('name', 'You must supply a name!').notEmpty();
+  req.checkBody('email', 'That email is not valid!').isEmail();
+  req.sanitizeBody('email').normalizeEmail({
     remove_dots: false,
     remove_extension: false,
-    gmail_remove_subaddress: false
+    gmail_remove_subaddress: false,
   });
-  req.checkBody("password", "Password cannot be blanked!").notEmpty();
+  req.checkBody('password', 'Password cannot be blanked!').notEmpty();
   req
-    .checkBody("password-confirm", "Password confirm cannot be blanked!")
+    .checkBody('password-confirm', 'Password confirm cannot be blanked!')
     .notEmpty();
   req
-    .checkBody("password-confirm", "Your passwords do not match")
+    .checkBody('password-confirm', 'Your passwords do not match')
     .equals(req.body.password);
   const errors = req.validationErrors();
   if (errors) {
-    req.flash("error", errors.map(err => err.msg));
-    res.render("register", {
-      title: "Register",
+    req.flash('error', errors.map(err => err.msg));
+    res.render('register', {
+      title: 'Register',
       body: req.body,
-      flashes: req.flash()
+      flashes: req.flash(),
     });
     return; // stop the function from running
   }
@@ -52,8 +53,8 @@ exports.register = async (req, res, next) => {
   next();
 };
 
-exports.account = async (req, res, next) => {
-  res.render("account");
+exports.account = async (req, res) => {
+  res.render('account');
 };
 
 exports.updateAccount = async (req, res) => {
@@ -63,8 +64,8 @@ exports.updateAccount = async (req, res) => {
     { _id: req.user._id },
     { $set: updates },
     // context is needed for mongoose to run properly (?)
-    { new: true, runValidators: true, context: "query" }
+    { new: true, runValidators: true, context: 'query' },
   );
-  req.flash("success", "successfully updated account!");
-  res.redirect("back");
+  req.flash('success', 'successfully updated account!');
+  res.redirect('back');
 };

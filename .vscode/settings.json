@@ -1,0 +1,33 @@
+{
+  "window.zoomLevel": 1,
+  "workbench.iconTheme": "material-icon-theme",
+  "eslint.autoFixOnSave": true,
+  "liveServer.settings.donotShowInfoMsg": true,
+  "editor.formatOnSave": false,
+  "editor.tabSize": 2,
+  "emmet.triggerExpansionOnTab": true,
+  "liveServer.settings.port": 6969,
+  "workbench.fontAliasing": "antialiased",
+  "editor.fontWeight": "500",
+  "editor.fontFamily": "Operator Mono",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 13,
+  // WES BOS
+  // "editor.lineHeight": 25,
+  // "editor.lineHeight": 20,
+  "editor.letterSpacing": 0.5,
+  "files.trimTrailingWhitespace": true,
+  // "editor.cursorStyle": "underline-thin",
+  // "editor.cursorBlinking": "solid",
+  "editor.renderWhitespace": "all",
+  "window.title": "${dirty} ${activeEditorMedium}${separator}${rootName}",
+  "materialTheme.cache.workbench.settings": {
+    "themeColours": "Palenight"
+  },
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "workbench.colorTheme": "Monokai Pro (Filter Octagon)",
+  "material-icon-theme.folders.theme": "specific",
+  "material-icon-theme.activeIconPack": "react_redux",
+  "git.autofetch": true
+}

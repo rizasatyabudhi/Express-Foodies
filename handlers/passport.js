@@ -1,6 +1,7 @@
-const passport = require("passport");
-const mongoose = require("mongoose");
-const User = mongoose.model("User");
+const passport = require('passport');
+const mongoose = require('mongoose');
+
+const User = mongoose.model('User');
 
 // our User model can use "createStrategy()" from passportLocalMongoose we import in User model
 passport.use(User.createStrategy());

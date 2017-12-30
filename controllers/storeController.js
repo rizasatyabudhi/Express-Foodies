@@ -105,3 +105,23 @@ exports.getStoresByTag = async (req, res) => {
     tags, title: 'Tags', tag, stores,
   });
 };
+
+
+// API
+
+exports.searchStore = async (req, res) => {
+  const stores = await Store
+    .find({
+      // we find using the index (remember that we set the index type to text)
+      $text: {
+        $search: req.query.q,
+      },
+    }, {
+      // make a new field of "score"
+      score: { $meta: 'textScore' },
+    })
+    .sort({ score: { $meta: 'textScore' } })
+    .limit(5);
+
+  res.json(stores);
+};

@@ -31,6 +31,7 @@ exports.isLoggedIn = (req, res, next) => {
   res.redirect('/login');
 };
 
+// when the user click "send a reset"
 exports.forgot = async (req, res) => {
   // 1. check if email exists
   const user = await User.findOne({ email: req.body.email });
@@ -61,6 +62,7 @@ exports.forgot = async (req, res) => {
   res.redirect('/login');
 };
 
+// when the user visit the reset link from email
 exports.reset = async (req, res) => {
   const user = await User.findOne({
     resetPasswordToken: req.params.token,
@@ -75,6 +77,7 @@ exports.reset = async (req, res) => {
   res.render('reset', { title: 'Reset Your Password' });
 };
 
+// when the user click "reset password" in the form
 exports.confirmedPasswords = async (req, res, next) => {
   // we use [] to escape "-" character
   if (req.body.password === req.body['password-confirm']) {

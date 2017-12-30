@@ -8,3 +8,9 @@ Email to Users
 3. create mail.js, and configure it there
 4. create a new function to send email "exports.send", and use it in authController
 5. generateHTML
+6. send the email
+
+
+Indexing
+* to make the database query MUCH faster
+1. define the index in Store.js model

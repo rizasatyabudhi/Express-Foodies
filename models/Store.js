@@ -43,6 +43,13 @@ const storeSchema = new mongoose.Schema({
   },
 });
 
+// Define index
+// we want to index field that will be able to be searched
+storeSchema.index({
+  name: 'text',
+  description: 'text',
+});
+
 storeSchema.pre('save', async function (next) {
   if (!this.isModified('name')) {
     next();

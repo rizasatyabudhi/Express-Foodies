@@ -11,6 +11,7 @@ Email to Users
 6. send the email
 
 
-Indexing
+Indexing & Search Query
 * to make the database query MUCH faster
 1. define the index in Store.js model
+2.

@@ -109,6 +109,7 @@ exports.getStoresByTag = async (req, res) => {
 
 // API
 
+// search query
 exports.searchStore = async (req, res) => {
   const stores = await Store
     .find({
@@ -125,3 +126,4 @@ exports.searchStore = async (req, res) => {
 
   res.json(stores);
 };
+

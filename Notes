@@ -14,4 +14,7 @@ Email to Users
 Indexing & Search Query
 * to make the database query MUCH faster
 1. define the index in Store.js model
-2.
+2. make the API in storeController.js
+
+Indexing Map & Map Searching
+1. define the index in Store.js model

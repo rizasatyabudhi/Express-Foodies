@@ -107,8 +107,7 @@ exports.getStoresByTag = async (req, res) => {
 };
 
 
-// API
-
+// API //
 // search query
 exports.searchStore = async (req, res) => {
   const stores = await Store
@@ -124,6 +123,26 @@ exports.searchStore = async (req, res) => {
     .sort({ score: { $meta: 'textScore' } })
     .limit(5);
 
+  res.json(stores);
+};
+
+
+exports.mapStores = async (req, res) => {
+  // lng FIRST, then lat
+  const coordinates = [req.query.lng, req.query.lat].map(parseFloat);
+  const q = {
+    location: {
+      // $near will search for store location that are near the given latlong
+      $near: {
+        $geometry: {
+          type: 'Point',
+          coordinates,
+        },
+        $maxDistance: 10000, // 10000 meter | 10km
+      },
+    },
+  };
+  const stores = await Store.find(q).select('slug name description location').limit(10);
   res.json(stores);
 };
 

@@ -22,7 +22,6 @@ const transport = nodemailer.createTransport({
 // });
 
 // use it in authController
-
 const generateHTML = (filename, options = {}) => {
   // __dirname is used so we we can have path that is absolute to this folder
   const html = pug.renderFile(`${__dirname}/../views/email/${filename}.pug`, options);

@@ -55,6 +55,7 @@ exports.getStores = async (req, res) => {
   res.render('stores', { title: 'Stores', stores });
 };
 
+// protecting routes
 const confirmOwner = (store, user) => {
   // we compare the author id that is in the Store model, with the id in current user
   if (!store.author.equals(user._id)) {
@@ -144,5 +145,10 @@ exports.mapStores = async (req, res) => {
   };
   const stores = await Store.find(q).select('slug name description location').limit(10);
   res.json(stores);
+};
+
+
+exports.mapPage = async (req, res) => {
+  res.render('map', { title: 'Map' });
 };
 

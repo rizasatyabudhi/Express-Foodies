@@ -25,11 +25,14 @@ const userSchema = new Schema({
   },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
+  hearts: [ //  use [array] for one to many relationship
+    { type: mongoose.Schema.ObjectId, ref: 'Store' },
+  ],
 });
 
 userSchema.virtual('gravatar').get(function () {
-  // we use gravatar for the profile image
-  // we hash the email from the model
+  // use gravatar for the profile image
+  // hash the email from the model
   // s=200 is the size of 200px 200px
   const hash = md5(this.email);
   return `https://gravatar.com/avatar/${hash}?s=200`;

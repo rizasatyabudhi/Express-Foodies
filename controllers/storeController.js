@@ -1,4 +1,7 @@
-const Store = require('../models/Store');
+const mongoose = require('mongoose');
+
+const Store = mongoose.model('Store');
+const User = mongoose.model('User');
 const multer = require('multer'); // For image upload
 const jimp = require('jimp'); // For image compress
 const uuid = require('uuid');
@@ -153,3 +156,17 @@ exports.mapPage = async (req, res) => {
   res.render('map', { title: 'Map' });
 };
 
+
+exports.heartStore = async (req, res) => {
+  // convert the array of object in "hearts" field into a string, because it is actually an object
+  const hearts = req.user.hearts.map(obj => obj.toString());
+  // if hearts in DB includes the id of hearts from the parameter,
+  // remove the heart in the DB ($pull) , else add the heart param to the DB ($addToSet)
+  const operator = hearts.includes(req.params.id) ? '$pull' : '$addToSet';
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    { [operator]: { hearts: req.params.id } },
+    { new: true }, // we need to return the newly updated user
+  );
+  res.json(user);
+};

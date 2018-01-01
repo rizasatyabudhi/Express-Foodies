@@ -18,3 +18,9 @@ Indexing & Search Query
 
 Indexing Map & Map Searching
 1. define the index in Store.js model
+
+
+Many to many relationship (use [])
+hears: [ // we use [array] for one to many relationship
+    { type: mongoose.Schema.ObjectId, ref: 'Store' },
+],

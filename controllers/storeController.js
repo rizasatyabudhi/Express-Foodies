@@ -94,6 +94,7 @@ exports.updateStore = async (req, res) => {
 };
 
 exports.getStore = async (req, res) => {
+  // populate the "author" field in Store
   const store = await Store.findOne({ slug: req.params.slug }).populate('author');
   // res.render("store", store);
   res.render('store', { store, title: store.name });

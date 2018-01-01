@@ -1,6 +1,6 @@
 extends layout
 
-
+include mixins/_reviewForm
 block content
   .single
     .single__hero
@@ -21,4 +21,5 @@ block content
 
 
 
-
+    if user
+      +reviewForm(store)

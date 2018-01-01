@@ -3,6 +3,15 @@ const multer = require('multer'); // For image upload
 const jimp = require('jimp'); // For image compress
 const uuid = require('uuid');
 
+exports.homePage = (req, res) => {
+  res.render('index');
+};
+
+exports.addStore = (req, res) => {
+  res.render('editStore', { title: 'Add Store' });
+};
+
+
 // for image upload
 const multerOptions = {
   storage: multer.memoryStorage(),
@@ -16,14 +25,6 @@ const multerOptions = {
   },
 };
 
-exports.homePage = (req, res) => {
-  res.render('index');
-};
-
-exports.addStore = (req, res) => {
-  res.render('editStore', { title: 'Add Store' });
-};
-
 exports.upload = multer(multerOptions).single('photo');
 exports.resize = async (req, res, next) => {
   // the image uploaded from multer will be sent to "file" property
@@ -33,7 +34,7 @@ exports.resize = async (req, res, next) => {
   }
   const extension = req.file.mimetype.split('/')[1];
   req.body.photo = `${uuid.v4()}.${extension}`;
-  // now we resize
+  // now we resize with "jimp"
   const photo = await jimp.read(req.file.buffer);
   await photo.resize(800, jimp.AUTO);
   await photo.write(`./public/uploads/${req.body.photo}`);
@@ -41,7 +42,7 @@ exports.resize = async (req, res, next) => {
 };
 
 exports.createStore = async (req, res) => {
-  req.body.author = req.user._id;
+  req.body.author = req.user._id; // assign the currently logged in as the author of store
   const store = await new Store(req.body).save();
   req.flash(
     'success',
@@ -98,7 +99,7 @@ exports.getStore = async (req, res) => {
 exports.getStoresByTag = async (req, res) => {
   const { tag } = req.params; // to get what tag is currently opened
   const tagQuery = tag || { $exists: true }; // if "tag" is not present, query all data that has "tag"
-  const tagsPromise = Store.getTagsList();
+  const tagsPromise = Store.getTagsList(); // getTagsList() is defined in Store.js (model)
   const storesPromise = Store.find({ tags: tagQuery });
   // we want 2 query at the same time, we use await and Promise.all
   const [tags, stores] = await Promise.all([tagsPromise, storesPromise]);
@@ -143,7 +144,7 @@ exports.mapStores = async (req, res) => {
       },
     },
   };
-  const stores = await Store.find(q).select('slug name description location').limit(10);
+  const stores = await Store.find(q).select('slug name description location photo').limit(10);
   res.json(stores);
 };
 

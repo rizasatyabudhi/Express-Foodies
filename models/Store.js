@@ -3,45 +3,52 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const slug = require('slugs');
 
-const storeSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    trim: true,
-    required: 'Please Enter Store Name!',
-  },
-  slug: String,
-  description: {
-    type: String,
-    trim: true,
-  },
-  tags: [String],
-  created: {
-    type: Date,
-    default: Date.now(),
-  },
-  location: {
-    type: {
+const storeSchema = new mongoose.Schema(
+  {
+    name: {
       type: String,
-      default: 'Point',
+      trim: true,
+      required: 'Please Enter Store Name!',
     },
-    coordinates: [
-      {
-        type: Number,
-        required: 'You must supply coordinates',
+    slug: String,
+    description: {
+      type: String,
+      trim: true,
+    },
+    tags: [String],
+    created: {
+      type: Date,
+      default: Date.now(),
+    },
+    location: {
+      type: {
+        type: String,
+        default: 'Point',
       },
-    ],
-    address: {
-      type: String,
-      required: 'You must supply an address',
+      coordinates: [
+        {
+          type: Number,
+          required: 'You must supply coordinates',
+        },
+      ],
+      address: {
+        type: String,
+        required: 'You must supply an address',
+      },
     },
+    photo: String,
+    author: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: 'You must supply an author!',
+    },
+  }
+  // this is to POPULATE the virtual field into the returned data
+  , {
+    toJSON: { virtual: true },
+    toObject: { virtual: true },
   },
-  photo: String,
-  author: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'User',
-    required: 'You must supply an author!',
-  },
-});
+);
 
 // Define index
 // we want to index field that will be able to be searched
@@ -78,5 +85,11 @@ storeSchema.statics.getTagsList = function () {
     { $sort: { count: -1 } },
   ]);
 };
+
+storeSchema.virtual('reviews', { // name of virtual field to be created in Store
+  ref: 'Review', // which model ?
+  localField: '_id', // which field on our "Store" model should be matched with foreignField?
+  foreignField: 'store', // which field on our "Review" model ?
+});
 
 module.exports = mongoose.model('Store', storeSchema);

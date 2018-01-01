@@ -24,3 +24,8 @@ Many to many relationship (use [])
 hears: [ // we use [array] for one to many relationship
     { type: mongoose.Schema.ObjectId, ref: 'Store' },
 ],
+
+Create Virtual Field
+1. in Store.js (model), create storeSchema.virtual({})
+2. create new option in Store model {toJSON:{virtual:true}}
+3. don't forget to populate() it in the query you want to get
